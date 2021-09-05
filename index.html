@@ -22,25 +22,26 @@
           <h2 class="form__title">Bill</h2>
           <div class="form__input">
             <img src="./images/icon-dollar.svg" alt="person">
-            <input type=" number">
+            <input class="num__input" v-model="bill" type=" number">
           </div>
         </div>
         <div class="tip">
           <h2 class="form__title">Select Tip %</h2>
           <div class="buttons__content">
-            <button>5%</button>
-            <button>10%</button>
-            <button>15%</button>
-            <button>25%</button>
-            <button>50%</button>
-            <button>Custom</button>
+            <button v-for="tip in tips" :key="tip" :class="{ active: tipActive === tip }"
+              v-on:click="tipActive = tip">{{tip}}%</button>
+            <div class="form__input" :class="{ 'custom-active': tipActive === 'custom' }">
+              <p v-show="tipActive === 'custom'">%</p>
+              <input class="tip__input" v-on:click="tipActive = 'custom'" v-model="customTip" type="number"
+                :placeholder=" tipActive!=='custom' ? 'Custom' :''">
+            </div>
           </div>
         </div>
         <div class="people">
           <h2 class="form__title">Number of People</h2>
           <div class="form__input">
             <img src="./images/icon-person.svg" alt="person">
-            <input type=" number">
+            <input class="num__input" v-model="peopleNumber" type="number">
           </div>
         </div>
       </div>
@@ -51,14 +52,14 @@
             <h2>Tip Amount</h2>
             <p>/ person</p>
           </article>
-          <p>$4</p>
+          <p>${{ tipAmountXPerson.toFixed(2) }}</p>
         </section>
         <section>
           <article>
             <h2>Total</h2>
             <p>/ person</p>
           </article>
-          <p>$4</p>
+          <p>${{ totalXPerson.toFixed(2) }}</p>
         </section>
         <button>Reset</button>
       </div>
@@ -74,10 +75,41 @@
 
 
   <script>
-    const { createApp, ref, reactive, toRefs, computed } = Vue;
+    const { createApp, ref, reactive, toRefs, computed, watch } = Vue;
     const app = createApp({
       setup() {
-        return {}
+        const state = reactive({
+          bill: null,
+          tips: [5, 10, 15, 25, 50],
+          peopleNumber: null,
+          tipActive: null,
+          customTip: null,
+          tipAmountXPerson: 0,
+          totalXPerson: 0
+        })
+
+
+        watch(() => state.tipActive, (tipActive) => {
+          console.log(tipActive);
+          if (tipActive !== 'custom') {
+            state.customTip = null;
+          }
+        })
+        watch(() => [state.bill, state.tipActive, state.peopleNumber, state.customTip], ([bill, tipActive, peopleNumber, customTip]) => {
+          console.log(bill, tipActive, peopleNumber);
+          if (bill && tipActive && peopleNumber) {
+            const tipPer = (tipActive !== 'custom' ? tipActive : customTip) / 100;
+            const split = bill / peopleNumber;
+            const tip = tipPer * split
+            console.log(tipPer);
+            state.tipAmountXPerson = tip;
+            state.totalXPerson = tip + split;
+          }
+        })
+
+        return {
+          ...toRefs(state)
+        }
       }
     })
   </script>

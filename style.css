@@ -78,7 +78,17 @@ body {
     margin-right: auto;
 }
 
-.form__input input {
+.form__input p {
+    margin-block-start: 0;
+    margin-block-end  : 0;
+    margin-left       : 1rem;
+    margin-right      : auto;
+    font-size         : 20px;
+    font-weight       : 700;
+    color             : var(--dark-grayish-cyan-2);
+}
+
+.form__input .num__input {
     margin-right    : 1rem;
     border          : none;
     background-color: transparent;
@@ -90,8 +100,31 @@ body {
     text-align      : right;
 }
 
+.form__input .tip__input {
+    text-align      : center;
+    margin-right    : 0.6rem;
+    border          : none;
+    background-color: transparent;
+    font-size       : 24px;
+    width           : 90%;
+    color           : var(--very-dark-cyan);
+    font-family     : 'Space Mono', monospace;
+    font-weight     : 700;
+    padding         : 0;
+}
+
+.custom-active {
+    box-shadow: 0 0 3px var(--strong-cyan);
+}
+
+.form__input input::placeholder {
+    color: var(--very-dark-cyan);
+}
+
 .form__input input:focus {
-    outline: none;
+    outline     : none;
+    margin-right: 1rem;
+    text-align  : right;
 }
 
 .buttons__content {
@@ -110,15 +143,11 @@ body {
     border-radius   : 4px;
 }
 
-.buttons__content button:last-child {
-    background-color: var(--light-grayish-cyan-2);
-    color           : var(--very-dark-cyan);
-    font-weight     : 700;
-}
+
 
 .active {
-    background-color: var(--strong-cyan);
-    color           : var(--very-dark-cyan);
+    background-color: var(--strong-cyan) !important;
+    color           : var(--very-dark-cyan) !important;
 }
 
 .result {
@@ -170,6 +199,6 @@ section>p {
     text-transform  : uppercase;
     font-size       : 18px;
     font-weight     : 700;
-    padding: 0.6rem 0;
-    border-radius: 5px;
+    padding         : 0.6rem 0;
+    border-radius   : 5px;
 }
