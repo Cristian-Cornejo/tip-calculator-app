@@ -8,6 +8,8 @@
     --light-grayish-cyan  : hsl(185, 41%, 84%);
     --light-grayish-cyan-2: hsl(189, 41%, 97%);
     --white               : hsl(0, 0%, 100%);
+    --invalid             : hsl(4, 52%, 61%);
+    ;
 }
 
 .attribution {
@@ -37,8 +39,18 @@ body {
 
 .title {
     color         : var(--very-dark-cyan);
-    letter-spacing: 10px;
+    letter-spacing: 15px;
     font-weight   : 700;
+}
+
+.title:first-child {
+    margin-top      : 2.5rem;
+    margin-block-end: 0;
+}
+
+.title:not(:first-child) {
+    margin-bottom     : 2.5rem;
+    margin-block-start: 0;
 }
 
 .card {
@@ -61,6 +73,26 @@ body {
 .form__title {
     font-size: 0.9rem;
     color    : var(--dark-grayish-cyan);
+}
+
+.form__invalid {
+    font-size: 0.9rem;
+    color    : var(--invalid);
+}
+
+.input-invalid {
+
+    border: 2px solid var(--invalid);
+}
+
+.people__text-container {
+    display        : inline-flex;
+    justify-content: flex-end;
+    width          : 100%;
+}
+
+.people__text-container>h2:first-child {
+    margin-right: auto;
 }
 
 .form__input {
@@ -98,6 +130,11 @@ body {
     font-family     : 'Space Mono', monospace;
     font-weight     : 700;
     text-align      : right;
+}
+
+.form__input .num__input::placeholder {
+    color: var(--dark-grayish-cyan-2);
+
 }
 
 .form__input .tip__input {
@@ -184,9 +221,11 @@ article {
 }
 
 section>p {
-    font-size  : 24px;
-    color      : var(--strong-cyan);
-    font-weight: 700;
+    font-size         : 35px;
+    color             : var(--strong-cyan);
+    font-weight       : 700;
+    margin-block-start: 0.4rem;
+    margin-block-end  : 0.4rem;
 }
 
 .result>button {
@@ -201,4 +240,61 @@ section>p {
     font-weight     : 700;
     padding         : 0.6rem 0;
     border-radius   : 5px;
+    margin-top      : 2rem;
+}
+
+.result>button:disabled {
+    background-color: var(--dark-grayish-cyan);
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+
+    .card {
+        align-self   : center;
+        margin-bottom: 2rem;
+        border-radius: 20px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+
+    #app {
+        margin: 10vh;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+
+    .card {
+        display              : grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap             : 20px;
+    }
+
+    .buttons__content {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .result {
+        max-height: 22rem;
+    }
+
+    .result>button {
+        margin-top: 11rem;
+    }
 }

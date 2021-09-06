@@ -15,14 +15,15 @@
 <body>
   <script src="https://unpkg.com/vue@next"></script>
   <div id="app">
-    <h1 class="title">SPLITTER</h1>
-    <div class="card">
+    <h1 class="title">SPLI</h1>
+    <h1 class="title">TTER</h1>
+    <div class="card container">
       <div class="form">
         <div class="bill">
           <h2 class="form__title">Bill</h2>
           <div class="form__input">
             <img src="./images/icon-dollar.svg" alt="person">
-            <input class="num__input" v-model="bill" type=" number">
+            <input class="num__input" v-model="bill" type=" number" placeholder="0">
           </div>
         </div>
         <div class="tip">
@@ -38,10 +39,13 @@
           </div>
         </div>
         <div class="people">
-          <h2 class="form__title">Number of People</h2>
-          <div class="form__input">
+          <div class="people__text-container">
+            <h2 class="form__title">Number of People</h2>
+            <h2 class="form__invalid" v-show="peopleNumber === 0">Can't be zero</h2>
+          </div>
+          <div class="form__input" :class="{ 'input-invalid': peopleNumber === 0 }">
             <img src="./images/icon-person.svg" alt="person">
-            <input class="num__input" v-model="peopleNumber" type="number">
+            <input class="num__input" v-model="peopleNumber" type="number" placeholder="0">
           </div>
         </div>
       </div>
@@ -61,21 +65,18 @@
           </article>
           <p>${{ totalXPerson.toFixed(2) }}</p>
         </section>
-        <button>Reset</button>
+        <button :disabled="totalXPerson === 0" v-on:click="reset">Reset</button>
       </div>
-      <div class="attribution">
-        Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
-        Coded by <a href="https://portafolio-cris-cor.web.app">Cristian Cornejo</a>.
-      </div>
-    </div>
 
+    </div>
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+      Coded by <a href="https://portafolio-cris-cor.web.app">Cristian Cornejo</a>.
+    </div>
   </div>
 
-
-
-
   <script>
-    const { createApp, ref, reactive, toRefs, computed, watch } = Vue;
+    const { createApp, ref, reactive, toRefs, watch } = Vue;
     const app = createApp({
       setup() {
         const state = reactive({
@@ -88,7 +89,6 @@
           totalXPerson: 0
         })
 
-
         watch(() => state.tipActive, (tipActive) => {
           console.log(tipActive);
           if (tipActive !== 'custom') {
@@ -96,19 +96,42 @@
           }
         })
         watch(() => [state.bill, state.tipActive, state.peopleNumber, state.customTip], ([bill, tipActive, peopleNumber, customTip]) => {
-          console.log(bill, tipActive, peopleNumber);
+
+
+          if (!bill || !tipActive || !peopleNumber) {
+
+            state.tipAmountXPerson = 0;
+            state.totalXPerson = 0;
+            return;
+          }
+
+          if (tipActive === 'custom' && !customTip) {
+            state.tipAmountXPerson = 0;
+            state.totalXPerson = 0;
+            return;
+          }
+
           if (bill && tipActive && peopleNumber) {
-            const tipPer = (tipActive !== 'custom' ? tipActive : customTip) / 100;
+            const tipPer = (tipActive !== 'custom' ? tipActive : customTip || 0) / 100;
             const split = bill / peopleNumber;
             const tip = tipPer * split
-            console.log(tipPer);
             state.tipAmountXPerson = tip;
             state.totalXPerson = tip + split;
           }
+
+
         })
 
+        function reset() {
+          state.bill = null;
+          state.peopleNumber = null;
+          state.tipActive = null;
+          state.customTip = null;
+        }
+
         return {
-          ...toRefs(state)
+          ...toRefs(state),
+          reset
         }
       }
     })
